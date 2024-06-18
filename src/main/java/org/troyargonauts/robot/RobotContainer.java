@@ -65,11 +65,10 @@ public class RobotContainer {
      */
     public void configureBindings() {
 
-        
         if (alliance == Alliance.Red) {
-            inverted = 1;
-        } else if (alliance == Alliance.Blue) {
             inverted = -1;
+        } else if (alliance == Alliance.Blue) {
+            inverted = 1;
         } 
 
         // driver controller commands
