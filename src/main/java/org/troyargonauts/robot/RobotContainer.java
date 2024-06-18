@@ -57,7 +57,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private int inverted = 1;
-    private Alliance alliance = DriverStation.getInstance().getAlliance();
+    private Optional<Alliance> alliance = DriverStation.getAlliance();
 
 
     /**
