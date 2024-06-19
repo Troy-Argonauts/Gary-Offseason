@@ -120,6 +120,7 @@ public class Robot extends TimedRobot {
         autoChooser.addOption("B 3 Note W2 C1 Center", new PathPlannerAuto("B 3 Note W2 C1 Center"));
         autoChooser.addOption("Left Side 3 Note C4C5 Auto", new PathPlannerAuto("Left Side 3 Note C4C5 Auto"));
         autoChooser.addOption("B P2 W3 W2 W1 Auto", new PathPlannerAuto("B P2 W3 W2 W1 Auto"));
+        autoChooser.addOption("Test Auto - 6 feet", new PathPlannerAuto("Test Auto - 6 feet"));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -148,8 +149,9 @@ public class Robot extends TimedRobot {
             }
 
             if (armLimitPressed) {
-              arm.run();
+            //   arm.run();
             }
+            
 //            if(robotContainer.getOperatorX()){
 //                System.out.println("Xpressed");
 //                shooter.run();
