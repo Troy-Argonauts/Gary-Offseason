@@ -25,6 +25,7 @@ import org.troyargonauts.robot.generated.TunerConstants;
 import org.troyargonauts.robot.subsystems.Arm.ArmStates;
 import org.troyargonauts.robot.subsystems.Intake.IntakeStates;
 import org.troyargonauts.robot.subsystems.Shooter.ShooterStates;
+import java.util.*;
 
 import static org.troyargonauts.robot.Constants.Controllers.*;
 
@@ -65,9 +66,9 @@ public class RobotContainer {
      */
     public void configureBindings() {
 
-        if (alliance == Alliance.Red) {
+        if (alliance.get() == Alliance.Red) {
             inverted = -1;
-        } else if (alliance == Alliance.Blue) {
+        } else {
             inverted = 1;
         } 
 
