@@ -2,9 +2,11 @@ package org.troyargonauts.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix6.configs.*;
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -49,18 +51,18 @@ public class Arm extends SubsystemBase {
      * Instantiates and configures motor controllers and sensors; creates Data Logs. Assigns PID constants.
      */
     public Arm() {
-        mmConfig.MotionMagicCruiseVelocity = 5; // 5 (mechanism) rotations per second cruise
-        mmConfig.MotionMagicAcceleration = 10; // Take approximately 0.5 seconds to reach max vel
+        mmConfig.MotionMagicCruiseVelocity = 60; // 5 (mechanism) rotations per second cruise
+        mmConfig.MotionMagicAcceleration = 140; // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
-        mmConfig.MotionMagicJerk = 100;
+        mmConfig.MotionMagicJerk = 300;
 
         Slot0Configs slot0 = config.Slot0;
-        slot0.kS = 0.25; // Add 0.25 V output to overcome static friction
+        slot0.kS = 0.; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
-        slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = 60; // A position error of 0.2 rotations results in 12 V output
+        slot0.kA = 0; // An acceleration of 1 rps/s requires 0.01 V output
+        slot0.kP = 14; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
-        slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output
+        slot0.kD = 0.2; // A velocity error of 1 rps results in 0.5 V output
 
 //        allConfigs.Voltage.PeakForwardVoltage = 4;
 //        allConfigs.MotorOutput.PeakForwardDutyCycle = 0.3;
@@ -80,6 +82,9 @@ public class Arm extends SubsystemBase {
         leftArmMotor.getConfigurator().apply(config);
         rightArmMotor.getConfigurator().apply(config);
 
+        rightArmMotor.getClosedLoopError().setUpdateFrequency(100);
+
+        //Left following right
         leftArmMotor.setControl(new Follower(rightArmMotor.getDeviceID(), true));
 
         rightArmMotor.setInverted(true);
@@ -146,26 +151,14 @@ public class Arm extends SubsystemBase {
      */
     public void run() {
 
-//        if (armTarget == 0 && leftArmEncoder <= 1 && rightArmEncoder <= 1){
-//            leftArmMotor.getConfigurator().apply(new Slot0Configs().withKP(ZERO).withKI(ZERO).withKD(ZERO));
-//            rightArmMotor.getConfigurator().apply(new Slot0Configs().withKP(ZERO).withKI(ZERO).withKD(ZERO));
-//
-//        }
-//        if (oldTarget > armTarget){
-//            leftArmMotor.getConfigurator().apply(new Slot0Configs().withKP(DOWN_P).withKI(DOWN_I).withKD(DOWN_D));
-//            rightArmMotor.getConfigurator().apply(new Slot0Configs().withKP(DOWN_P).withKI(DOWN_I).withKD(DOWN_D));
-//
-//        } else{
-//            leftArmMotor.getConfigurator().apply(new Slot0Configs().withKP(UP_P).withKI(UP_I).withKD(UP_D));
-//            rightArmMotor.getConfigurator().apply(new Slot0Configs().withKP(UP_P).withKI(UP_I).withKD(UP_D));
-//        }
-
-
-
+        if (armTarget == 0 && leftArmEncoder <= 1 && rightArmEncoder <= 1){
+            rightArmMotor.setControl(new StaticBrake());
+        } else {
+            rightArmMotor.setControl(mmRequest.withPosition(armTarget));
+        }
         
-        leftArmMotor.setControl(mmRequest.withPosition(armTarget));
-        rightArmMotor.setControl(mmRequest.withPosition(armTarget));
-
+        //leftArmMotor.setControl(mmRequest.withPosition(armTarget));
+        //rightArmMotor.setControl(mmRequest.withPosition(armTarget));
     }
 
     /**
@@ -201,7 +194,7 @@ public class Arm extends SubsystemBase {
         /**
          * Amp scoring Arm position
          */
-        AMP(21.6), //24.4
+        AMP(23.11), //24.4
 
         /**
          * Stage scoring Arm position
