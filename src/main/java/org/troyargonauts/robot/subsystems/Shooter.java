@@ -169,7 +169,11 @@ public class Shooter extends SubsystemBase {
         /**
          * ThrowUp Shooter RPM
          */
-        THROWOUT(-700,-700);
+        THROWOUT(-700,-700),
+        /**
+         * Feeder Shooter RPM
+         */
+        FEEDER(500, 500);
 
         final double encoderTopRPM, encoderBottomRPM;
 
