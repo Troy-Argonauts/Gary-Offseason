@@ -29,6 +29,8 @@ import org.troyargonauts.robot.subsystems.Shooter.ShooterStates;
 
 import static org.troyargonauts.robot.Constants.Controllers.*;
 
+import java.util.Optional;
+
 /**
  * Class for setting up commands for the entire robot
  */
@@ -59,11 +61,19 @@ public class RobotContainer {
 
     private int inverted = 1;
 
+    private Optional<Alliance> alliance = DriverStation.getAlliance();
+
 
     /**
      * Configures controller button bindings for Teleoperated mode
      */
     public void configureBindings() {
+
+        if (alliance.get() == Alliance.Red) {
+            inverted = -1;
+        } else {
+            inverted = 1;
+        }
 
         // driver controller commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
