@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import org.troyargonauts.robot.commands.ShootInPlaceAuton;
 import org.troyargonauts.robot.commands.SubwooferShoot;
 import org.troyargonauts.robot.commands.StartingSequence;
@@ -142,10 +144,12 @@ public class Robot extends TimedRobot {
 
             private boolean innerArmLimitPressed = false;
         }, 100, 10, TimeUnit.MILLISECONDS);*/
+        new Trigger(Robot.getArm()::getLimitSwitch).onTrue(
+            Commands.runOnce(()->Robot.getArm().resetEncoders())
+        );
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             if (Robot.getArm().getLimitSwitch()) {
                 armLimitPressed = true;
-                Robot.getArm().resetEncoders();
             }
 
             if (armLimitPressed) {
