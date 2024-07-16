@@ -240,7 +240,13 @@ public class Arm extends SubsystemBase {
          * Climbing Arm position
          */
         CLIMBER(0),
-        START(0);
+
+        START(0),
+
+        /**
+         * Feeder Arm position
+         */
+        FEEDER(0);
 
         final double armPosition;
 

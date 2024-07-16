@@ -25,6 +25,7 @@ import org.troyargonauts.robot.generated.TunerConstants;
 import org.troyargonauts.robot.subsystems.Arm.ArmStates;
 import org.troyargonauts.robot.subsystems.Intake.IntakeStates;
 import org.troyargonauts.robot.subsystems.Shooter.ShooterStates;
+ 
 
 import static org.troyargonauts.robot.Constants.Controllers.*;
 
@@ -57,19 +58,12 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private int inverted = 1;
-    private Optional<Alliance> alliance = DriverStation.getAlliance();
 
 
     /**
      * Configures controller button bindings for Teleoperated mode
      */
     public void configureBindings() {
-
-        if (alliance == Alliance.Red) {
-            inverted = -1;
-        } else if (alliance == Alliance.Blue) {
-            inverted = 1;
-        } 
 
         // driver controller commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -195,9 +189,14 @@ public class RobotContainer {
             new InstantCommand(() ->  Robot.getIntake().setState(IntakeStates.OFF), Robot.getIntake())
         );
 
-        operator.povDown().onTrue(
-            new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.OFF), Robot.getShooter())
+        operator.povUp().onTrue(
+            new ParallelCommandGroup(
+                new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.FEEDER), Robot.getShooter()),
+                new InstantCommand(() -> Robot.getArm().setState(ArmStates.FEEDER), Robot.getArm())
+            )
         );
+
+        
 
 
 
