@@ -36,7 +36,6 @@ import java.util.Optional;
  */
 public class RobotContainer {
 
-    CurrentLimitsConfigs limit = new CurrentLimitsConfigs();
     
     /* Setting up bindings for necessary control of the swerve drive platform */
 
@@ -295,12 +294,7 @@ public class RobotContainer {
 //        drivetrain.getModule(1).getSteerMotor().getConfigurator().apply(configs);
 //        drivetrain.getModule(2).getSteerMotor().getConfigurator().apply(configs);
 //        drivetrain.getModule(3).getSteerMotor().getConfigurator().apply(configs);
-        limit.SupplyCurrentLimit = 80; 
-        limit.StatorCurrentLimitEnable = true;   
-        for (int i = 0; i < 4; i++){
-                drivetrain.getModule(i).getDriveMotor().getConfigurator().apply(limit);
-        }
-
+        
     }
     /**
      * Gets boolean value of Operator controller RightBumper. Used to regulate intake when beam break is activated.
