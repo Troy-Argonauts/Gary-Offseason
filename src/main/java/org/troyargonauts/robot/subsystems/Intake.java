@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
     private DoubleLogEntry intakeMotorBottomVoltage;
     private DoubleLogEntry intakeOutputTopCurrentLog;
     public BooleanSupplier noteReady;
-    public CurrentLimitsConfigs intakeConfigs;
+    public CurrentLimitsConfigs limitConfigs = new CurrentLimitsConfigs();
     /**
      * Instantiates motor controllers and sensors; creates data logs
      */
@@ -43,9 +43,11 @@ public class Intake extends SubsystemBase {
 
         DataLog log = DataLogManager.getLog();
 
-       intakeConfigs = new CurrentLimitsConfigs();
-//       intakeConfigs.withStatorCurrentLimit(40);
-
+        //Current Limit
+        limitConfigs.SupplyCurrentLimit = 30;
+        limitConfigs.SupplyCurrentLimitEnable = true;
+        motorTop.getConfigurator().apply(limitConfigs);
+        motorBottom.getConfigurator().apply(limitConfigs);
 //
         intakeMotorTopVoltage =  new DoubleLogEntry(log, "Intake Left Motor Bus Voltage log");
         intakeOutputBottomCurrentLog =  new DoubleLogEntry(log, "Intake Right Motor Output Current log");

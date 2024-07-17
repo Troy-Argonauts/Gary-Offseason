@@ -1,5 +1,6 @@
 package org.troyargonauts.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -35,6 +36,7 @@ public class Climber extends SubsystemBase {
 
     private final PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
 
+
     /**
      * Instantiates motor controller and sets the neutral mode to brake. Creates data logs
      */
@@ -49,6 +51,9 @@ public class Climber extends SubsystemBase {
 
         climberMotorVoltage = new DoubleLogEntry((log), "Climber Motor Voltage");
         climberOutputCurrentLog = new DoubleLogEntry((log), "Climber Current Output Values");
+
+
+        //No current limit for climber
 
 
 //       // distanceSensor = new Rev2mDistanceSensor(Rev2mDistanceSensor.Port.kOnboard);

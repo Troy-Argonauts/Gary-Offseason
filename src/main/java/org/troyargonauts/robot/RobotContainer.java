@@ -36,7 +36,8 @@ import java.util.Optional;
  */
 public class RobotContainer {
 
-
+    CurrentLimitsConfigs limit = new CurrentLimitsConfigs();
+    
     /* Setting up bindings for necessary control of the swerve drive platform */
 
     public final CommandXboxController driver = new CommandXboxController(DRIVER);
@@ -58,9 +59,12 @@ public class RobotContainer {
                                                                 // driving in open loop
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    
 
+
+
+    
     private int inverted = 1;
-
     private Optional<Alliance> alliance = DriverStation.getAlliance();
 
 
@@ -291,6 +295,11 @@ public class RobotContainer {
 //        drivetrain.getModule(1).getSteerMotor().getConfigurator().apply(configs);
 //        drivetrain.getModule(2).getSteerMotor().getConfigurator().apply(configs);
 //        drivetrain.getModule(3).getSteerMotor().getConfigurator().apply(configs);
+        limit.SupplyCurrentLimit = 80; 
+        limit.StatorCurrentLimitEnable = true;   
+        for (int i = 0; i < 4; i++){
+                drivetrain.getModule(i).getDriveMotor().getConfigurator().apply(limit);
+        }
 
     }
     /**

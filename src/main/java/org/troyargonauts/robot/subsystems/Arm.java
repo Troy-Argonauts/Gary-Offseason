@@ -45,6 +45,7 @@ public class Arm extends SubsystemBase {
     private final MotionMagicVoltage mmRequest = new MotionMagicVoltage(0);
     TalonFXConfiguration config = new TalonFXConfiguration();
     MotionMagicConfigs mmConfig = config.MotionMagic;
+    CurrentLimitsConfigs limitConfigs = new CurrentLimitsConfigs();
 
 
     /**
@@ -64,16 +65,15 @@ public class Arm extends SubsystemBase {
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0.2; // A velocity error of 1 rps results in 0.5 V output
 
-//        allConfigs.Voltage.PeakForwardVoltage = 4;
-//        allConfigs.MotorOutput.PeakForwardDutyCycle = 0.3;
-//        allConfigs.Voltage.PeakReverseVoltage = -4;
-//       allConfigs.MotorOutput.PeakForwardDutyCycle = 0.3;
-//       allConfigs.MotorOutput.PeakReverseDutyCycle = -0.3;
+
+        //Current Limit
+        limitConfigs.SupplyCurrentLimit = 60;
+        limitConfigs.SupplyCurrentLimitEnable = true;
+        leftArmMotor.getConfigurator().apply(limitConfigs);
+        rightArmMotor.getConfigurator().apply(limitConfigs);
 
 
 
-
-//        positionVoltage.withLimitForwardMotion(true);
 
 
         leftArmMotor = new TalonFX(LEFT_MOTOR_ID, CANBUS_NAME);

@@ -1,5 +1,6 @@
 package org.troyargonauts.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.Slot2Configs;
@@ -37,7 +38,8 @@ public class Shooter extends SubsystemBase {
 
     private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
     private final CoastOut coastRequest = new CoastOut();
-//    public final Slot0Configs config = new Slot0Configs();
+
+    CurrentLimitsConfigs limitConfigs = new CurrentLimitsConfigs();
 
     /**
      * Instantiates and configures motor controllers and sensors; creates Data Logs. Assigns PID constants.
@@ -60,6 +62,11 @@ public class Shooter extends SubsystemBase {
 //        bottomMotor.getConfigurator().apply(allConfigs);
 
 
+        //Current Limits
+        limitConfigs.SupplyCurrentLimit = 60;
+        limitConfigs.SupplyCurrentLimitEnable = true;
+        topMotor.getConfigurator().apply(limitConfigs);
+        bottomMotor.getConfigurator().apply(limitConfigs);
 
 
         DataLog log = DataLogManager.getLog();
@@ -91,7 +98,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Bottom Encoder RPM", bottomEncoderRPM);
     }
 
-    public void exit(){
+    public void exit() {
         topMotor.setVoltage(0);
         bottomMotor.setVoltage(0);
     }
@@ -100,14 +107,14 @@ public class Shooter extends SubsystemBase {
      * Sets the PID loops for the top and bottom Shooter motors to their corresponding target velocities if ShooterState is not OFF. If ShooterState is OFF, motors are set to Coast
      */
     public void run() {
-         if(currentState == ShooterStates.OFF){
-             topMotor.setControl(coastRequest);
-             bottomMotor.setControl(coastRequest);
+        if (currentState == ShooterStates.OFF) {
+            topMotor.setControl(coastRequest);
+            bottomMotor.setControl(coastRequest);
 
-         } else {
-             topMotor.setControl(velocityVoltage.withVelocity(topTarget / 60));
-             bottomMotor.setControl(velocityVoltage.withVelocity(bottomTarget / 60));
-         }
+        } else {
+            topMotor.setControl(velocityVoltage.withVelocity(topTarget / 60));
+            bottomMotor.setControl(velocityVoltage.withVelocity(bottomTarget / 60));
+        }
     }
 
     /**
@@ -120,7 +127,7 @@ public class Shooter extends SubsystemBase {
         this.topTarget = topTarget;
         this.bottomTarget = bottomTarget;
     }
-    
+
     /**
      * Sets all encoder positions to 0.
      */
@@ -169,7 +176,7 @@ public class Shooter extends SubsystemBase {
         /**
          * ThrowUp Shooter RPM
          */
-        THROWOUT(-700,-700),
+        THROWOUT(-700, -700),
         /**
          * Feeder Shooter RPM
          */
