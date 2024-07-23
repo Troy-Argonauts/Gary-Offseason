@@ -173,7 +173,7 @@ public class Shooter extends SubsystemBase {
         /**
          * Feeder Shooter RPM
          */
-        FEEDER(500, 500);
+        FEEDER(3000, 3000);
 
         final double encoderTopRPM, encoderBottomRPM;
 
