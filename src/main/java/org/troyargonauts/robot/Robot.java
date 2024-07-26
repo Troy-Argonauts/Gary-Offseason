@@ -144,12 +144,13 @@ public class Robot extends TimedRobot {
 
             private boolean innerArmLimitPressed = false;
         }, 100, 10, TimeUnit.MILLISECONDS);*/
-        new Trigger(Robot.getArm()::getLimitSwitch).onTrue(
-            Commands.runOnce(()->Robot.getArm().resetEncoders())
-        );
+        // new Trigger(Robot.getArm()::getLimitSwitch).whileTrue(
+        //     Commands.runOnce(()->Robot.getArm().resetEncoders())
+        // );
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             if (Robot.getArm().getLimitSwitch()) {
                 armLimitPressed = true;
+                arm.resetEncoders();
             }
 
             if (armLimitPressed) {
