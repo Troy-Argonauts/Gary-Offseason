@@ -187,7 +187,7 @@ public class Arm extends SubsystemBase {
      * @return Whether the PIDs are finished
      */
     public boolean isPIDFinished() {
-        return (Math.abs(armTarget - rightArmMotor.getPosition().getValueAsDouble()) <= 0.2);
+        return (Math.abs(armTarget - rightArmMotor.getPosition().getValueAsDouble()) <= 0.5);
 
     }
 
@@ -224,7 +224,7 @@ public class Arm extends SubsystemBase {
         /**
          * Subwoofer scoring Arm position
          */
-        SUBWOOFER(0),
+        SUBWOOFER(1),
 
         /**
          * Wing scoring Arm position
@@ -234,13 +234,16 @@ public class Arm extends SubsystemBase {
         /**
          * Wing scoring Arm position
          */
-        WING_NOTE(7.6), // possibly 6.5
+        WING_NOTE1(7.9),// possibly 6.5
+         WING_NOTE2(7.5),
+         WING_NOTE3(7.9),
 
         /**
          * Climbing Arm position
          */
         CLIMBER(0),
-        START(0);
+        START(0),
+        FEEDER(0);
 
         final double armPosition;
 

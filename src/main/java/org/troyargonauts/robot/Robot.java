@@ -17,6 +17,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -198,6 +199,16 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("Alliance Side", DriverStation.getAlliance().get().toString());
         SmartDashboard.putNumber(" Arm Target", Robot.getArm().getCurrentTarget());
 
+        if (DriverStation.getAlliance().isPresent()){
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+                RobotContainer.inverted = -1;
+                SmartDashboard.putNumber("Inverted", RobotContainer.inverted);
+            } else {
+                RobotContainer.inverted = 1;
+                SmartDashboard.putNumber("Inverted", RobotContainer.inverted);
+
+            } 
+        }
     }
 
     /**
