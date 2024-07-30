@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,7 +26,6 @@ import org.troyargonauts.robot.generated.TunerConstants;
 import org.troyargonauts.robot.subsystems.Arm.ArmStates;
 import org.troyargonauts.robot.subsystems.Intake.IntakeStates;
 import org.troyargonauts.robot.subsystems.Shooter.ShooterStates;
- 
 
 import static org.troyargonauts.robot.Constants.Controllers.*;
 
@@ -59,7 +59,7 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private int inverted = 1;
+    public static int inverted = 1;
 
     private Optional<Alliance> alliance = DriverStation.getAlliance();
 
@@ -69,19 +69,13 @@ public class RobotContainer {
      */
     public void configureBindings() {
 
-        if (alliance.get() == Alliance.Red) {
-            inverted = -1;
-        } else {
-            inverted = 1;
-        }
-
         // driver controller commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
             drivetrain.applyRequest(
                 () -> drive.withVelocityX(inverted * OMath.square(-driver.getLeftY()) * Constants.Drivetrain.MAX_SPEED) // Drive forward with
                 // negative Y (forward)
                 .withVelocityY(inverted * OMath.square(-driver.getLeftX()) * Constants.Drivetrain.MAX_SPEED) // Drive left with negative X (left)
-                .withRotationalRate(inverted * (-driver.getRightX()) * Constants.Drivetrain.MAX_ANGULAR_RATE) // Drive counterclockwise with negative X (left)
+                .withRotationalRate((-driver.getRightX()) * Constants.Drivetrain.MAX_ANGULAR_RATE) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -154,7 +148,7 @@ public class RobotContainer {
         operator.y().onTrue(
             new ParallelCommandGroup(
                 new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.WING_NOTE), Robot.getShooter()),
-                new InstantCommand(() -> Robot.getArm().setState(ArmStates.WING_NOTE), Robot.getArm())
+                new InstantCommand(() -> Robot.getArm().setState(ArmStates.WING_NOTE3), Robot.getArm())
 //                    new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.WING), Robot.getShooter()),
 //                    new InstantCommand(() -> Robot.getArm().setState(ArmStates.WING), Robot.getArm())
             )
@@ -206,14 +200,19 @@ public class RobotContainer {
             )
         );
 
-        
+        operator.povUp().onTrue(
+            new ParallelCommandGroup(
+                new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.FEEDER), Robot.getShooter()),
+                new InstantCommand(() -> Robot.getArm().setState(ArmStates.FEEDER), Robot.getArm())
+            )
+        );
+
+    
 
 
 
 
-
-
-    }
+}
 
     /**
      * Runs configureBindings() method and registers Pathplanner NamedCommands
@@ -238,8 +237,16 @@ public class RobotContainer {
 //            .andThen(new InstantCommand(() -> Robot.getShooter().setDesiredTarget(10, 10), Robot.getShooter()))
         );
 
+        NamedCommands.registerCommand("Shooting Sequence W1", 
+            new W1Shoot()
+        );
+
         NamedCommands.registerCommand("Shooting Sequence W2", 
             new W2Shoot()
+        );
+
+        NamedCommands.registerCommand("Shooting Sequence W3", 
+            new W3Shoot()
         );
 
         NamedCommands.registerCommand("Shooting Sequence W3",

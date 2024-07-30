@@ -165,11 +165,13 @@ public class Shooter extends SubsystemBase {
         /**
          * Subwoofer scoring Shooter RPM
          */
-        SUBWOOFER(2000, 2000),
+        SUBWOOFER(1800, 1800),
+      
         /**
          * ThrowUp Shooter RPM
          */
         THROWOUT(-700,-700),
+      
         /**
          * Feeder Shooter RPM
          */
