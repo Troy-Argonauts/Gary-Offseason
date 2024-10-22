@@ -122,9 +122,10 @@ public class RobotContainer {
         driver.b().onTrue(
                 new InstantCommand(() -> drivetrain.getPigeon2().setYaw(180 + drivetrain.getPigeon2().getAngle()), drivetrain)
         );
-        driver.povLeft().onTrue(
-                new InstantCommand(() -> drivetrain.getPigeon2().setYaw(0   ), drivetrain)
-        );
+        
+        //driver.povLeft().onTrue(
+        //         new InstantCommand(() -> drivetrain.getPigeon2().setYaw(0   ), drivetrain)
+        // );
 
         operator.a().onTrue(
             new ParallelCommandGroup(
