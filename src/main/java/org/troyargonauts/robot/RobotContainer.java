@@ -26,9 +26,10 @@ import org.troyargonauts.robot.generated.TunerConstants;
 import org.troyargonauts.robot.subsystems.Arm.ArmStates;
 import org.troyargonauts.robot.subsystems.Intake.IntakeStates;
 import org.troyargonauts.robot.subsystems.Shooter.ShooterStates;
-import java.util.*;
 
 import static org.troyargonauts.robot.Constants.Controllers.*;
+
+import java.util.Optional;
 
 /**
  * Class for setting up commands for the entire robot
@@ -59,6 +60,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     public static int inverted = 1;
+
     private Optional<Alliance> alliance = DriverStation.getAlliance();
 
 
@@ -66,6 +68,7 @@ public class RobotContainer {
      * Configures controller button bindings for Teleoperated mode
      */
     public void configureBindings() {
+
         // driver controller commands
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
             drivetrain.applyRequest(
@@ -191,8 +194,11 @@ public class RobotContainer {
             new InstantCommand(() ->  Robot.getIntake().setState(IntakeStates.OFF), Robot.getIntake())
         );
 
-        operator.povDown().onTrue(
-            new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.OFF), Robot.getShooter())
+        operator.povUp().onTrue(
+            new ParallelCommandGroup(
+                new InstantCommand(() -> Robot.getShooter().setState(ShooterStates.FEEDER), Robot.getShooter()),
+                new InstantCommand(() -> Robot.getArm().setState(ArmStates.FEEDER), Robot.getArm())
+            )
         );
 
         operator.povUp().onTrue(
@@ -202,12 +208,12 @@ public class RobotContainer {
             )
         );
 
+    
 
 
 
 
-
-    }
+}
 
     /**
      * Runs configureBindings() method and registers Pathplanner NamedCommands
