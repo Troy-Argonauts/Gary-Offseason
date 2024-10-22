@@ -190,7 +190,7 @@ public class Arm extends SubsystemBase {
         return (Math.abs(armTarget - rightArmMotor.getPosition().getValueAsDouble()) <= 0.5);
 
     }
-
+    
     /**
      * Changes the setpoint based on joystick value
      * .
@@ -224,7 +224,7 @@ public class Arm extends SubsystemBase {
         /**
          * Subwoofer scoring Arm position
          */
-        SUBWOOFER(1),
+        SUBWOOFER(0),
 
         /**
          * Wing scoring Arm position
